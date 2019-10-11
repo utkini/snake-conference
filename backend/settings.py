@@ -1,6 +1,10 @@
 import logging.config
+import os
 
-GAME_LOG_DIR = '.game_log'
+GAME_LOG_DIR_NAME = '.game_log'
+
+GAME_LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__name__)), '.game_log')
+
 GAME_SCORES = 1
 HEIGHT_MAP = 5
 WIDTH_MAP = 5
