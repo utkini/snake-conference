@@ -1,3 +1,4 @@
+# Ignore dot files
 .*
 !/.gitignore
 
@@ -16,3 +17,6 @@ frontend/yarn-error.log*
 
 # Editor directories and files
 .idea
+
+# Ignore players files
+backend/game_players/player_*
