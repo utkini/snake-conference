@@ -1,7 +1,7 @@
 import pytest
 
 from game.game_map import PointState, GameMap
-from game.play import HEIGHT_MAP, WIDTH_MAP
+from settings import HEIGHT_MAP, WIDTH_MAP
 from game.player import BasePlayer
 
 
