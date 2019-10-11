@@ -25,10 +25,20 @@ def players(amount=2, name_prefix='test'):
     return result
 
 
+@pytest.fixture
+def clear_game_logs():
+    shutil.rmtree(settings.GAME_LOG_DIR, ignore_errors=True)
+    yield
+    shutil.rmtree(settings.GAME_LOG_DIR, ignore_errors=True)
+    os.makedirs(settings.GAME_LOG_DIR)
+
+
 class TestGameLog:
 
-    def test_save(self, players):
-        shutil.rmtree(settings.GAME_LOG_DIR, ignore_errors=True)
+    def test_save(self, players, clear_game_logs):
+
         sg = SnakeGame(players)
         sg.run()
         SnakeGameLog(sg).save()
+
+        assert len(os.listdir(settings.GAME_LOG_DIR)) == 1
