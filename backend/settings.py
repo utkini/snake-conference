@@ -2,8 +2,11 @@ import logging.config
 import os
 
 GAME_LOG_DIR_NAME = '.game_log'
+GAME_LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), GAME_LOG_DIR_NAME)
 
-GAME_LOG_DIR = os.path.join(os.path.dirname(os.path.abspath(__name__)), '.game_log')
+GAME_PLAYERS_DIR_NAME = 'game_players'
+GAME_PLAYERS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), GAME_PLAYERS_DIR_NAME)
+PLAYER_FILE_PREFIX = 'player_'
 
 GAME_SCORES = 1
 HEIGHT_MAP = 5

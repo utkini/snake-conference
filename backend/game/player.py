@@ -16,6 +16,8 @@ class PlayerDirection(Enum):
 
 
 class BasePlayer:
+    next_step_obj = None
+
     def __init__(self, name: str, _hash: str):
         self.name = name
         self.hash = _hash
@@ -67,13 +69,13 @@ class BasePlayer:
         return self.__score
 
     def next_step(self, game_map):
-        raise NotImplementedError('Need to implement next_step')
+        return self.next_step_obj.next_step(game_map)
 
     def serialize(self):
         return {'hash': self.hash, 'name': self.name}
 
 
-class SimpleTestPlayer(BasePlayer):
+class SimpleTestPlayer:
     _steps = (PlayerAction.LEFT.value, PlayerAction.RIGHT.value, PlayerAction.STRAIGHT.value, PlayerAction.STRAIGHT.value,
               PlayerAction.STRAIGHT.value)
     steps = iter(_steps)

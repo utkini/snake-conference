@@ -8,21 +8,18 @@ import pytest
 
 import settings
 from game.game_log import SnakeGameLog
+from game.game_players_loader import ClassPlayersLoader
 from game.play import SnakeGame
 from game.player import SimpleTestPlayer1, SimpleTestPlayer2
 
 
 @pytest.fixture(scope='class')
 def players(amount=2, name_prefix='test'):
-    result = {}
-    pl_classes = cycle((SimpleTestPlayer1, SimpleTestPlayer2))
-    for num in range(amount):
-        pl_name = "{0}{1}".format(name_prefix, num)
-        pl_hash = hashlib.md5(pl_name.encode()).hexdigest()
-        pl_class = next(pl_classes)
-        result[pl_hash] = pl_class(pl_name, pl_hash)
+    cycle_classes = cycle((SimpleTestPlayer1, SimpleTestPlayer2))
+    classes = [next(cycle_classes) for _ in range(amount)]
+    pl_loader = ClassPlayersLoader(classes=classes)
 
-    return result
+    return pl_loader.get_players()
 
 
 @pytest.fixture

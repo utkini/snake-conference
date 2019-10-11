@@ -1,10 +1,10 @@
-import hashlib
 import random
 from itertools import cycle
 
 import pytest
 
 from game.game_map import GameMap, Point, PointState, MapState
+from game.game_players_loader import ClassPlayersLoader
 from game.play import SnakeGame, GameState
 from game.player import SimpleTestPlayer, PlayerAction
 
@@ -22,8 +22,6 @@ def generate_steps():
 @pytest.fixture(scope='class')
 def players_generator():
     def get_players(amount=1, name_prefix='test', players_steps=None):
-        result = {}
-
         if players_steps is not None:
             players_classes = [
                 get_class_player(f'TestPlayer{num_class}', steps)
@@ -37,13 +35,10 @@ def players_generator():
                 for num_class in range(amount)
             )
 
-        for num in range(amount):
-            pl_name = "{0}{1}".format(name_prefix, num)
-            pl_hash = hashlib.md5(pl_name.encode()).hexdigest()
-            pl_class = next(pl_classes)
-            result[pl_hash] = pl_class(pl_name, pl_hash)
+        classes = [next(pl_classes) for _ in range(amount)]
+        pl_loader = ClassPlayersLoader(classes=classes)
 
-        return result
+        return pl_loader.get_players()
 
     return get_players
 

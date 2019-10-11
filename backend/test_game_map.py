@@ -1,13 +1,20 @@
+from itertools import cycle
+
 import pytest
 
 from game.game_map import PointState, GameMap
+from game.game_players_loader import ClassPlayersLoader
 from settings import HEIGHT_MAP, WIDTH_MAP
-from game.player import BasePlayer
+from game.player import SimpleTestPlayer1, SimpleTestPlayer2
 
 
 @pytest.fixture(scope='class')
-def players():
-    return {'test': BasePlayer('test', 'test'), 'test1': BasePlayer('test1', 'test1')}
+def players(amount=2, name_prefix='test'):
+    cycle_classes = cycle((SimpleTestPlayer1, SimpleTestPlayer2))
+    classes = [next(cycle_classes) for _ in range(amount)]
+    pl_loader = ClassPlayersLoader(classes=classes)
+
+    return pl_loader.get_players()
 
 
 class TestGameMap:
