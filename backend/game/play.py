@@ -34,6 +34,7 @@ class SnakeGame:
         self.start_time = None
         self.end_time = None
         self.winner = None
+        self.play_iterations = settings.GAME_MAX_ITERATION * len(players)
 
     def _apply_action_on_map_state(self, player: BasePlayer, map_state: MapState):
 
@@ -118,6 +119,8 @@ class SnakeGame:
 
         for player in cycle_players:
 
+            self.play_iterations -= 1
+
             if self.game_state == GameState.STOPPED:
                 return
 
@@ -129,3 +132,6 @@ class SnakeGame:
             self._apply_action_on_map_state(player, map_state)
 
             self.game_log.append(self.game_map.serialize())
+
+            if not self.play_iterations:
+                self.stop()

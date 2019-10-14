@@ -7,7 +7,7 @@ def main():
     players = FilePlayersLoader().get_players()
     sg = SnakeGame(players)
     sg.run()
-    # SnakeGameLog(sg).save()
+    SnakeGameLog(sg).save()
 
 
 if __name__ == '__main__':
