@@ -1,6 +1,7 @@
 # Ignore dot files
 .*
 !/.gitignore
+!/.editorconfig
 
 **/.DS_Store
 frontend/node_modules
