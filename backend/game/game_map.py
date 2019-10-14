@@ -5,7 +5,9 @@ from copy import copy
 from enum import Enum
 
 import settings
-from .player import BasePlayer
+
+if typing.TYPE_CHECKING:
+    from .player import BasePlayer
 
 
 log = logging.getLogger(__name__)
@@ -119,12 +121,13 @@ class GameMap:
 
     def move_point_down(self, point_index):
         dst_point_index = point_index + self.width
-        if (point_index + self.width) > len(self.points):
+        if (point_index + self.width) >= len(self.points):
             return MapState.CRASH, dst_point_index
 
         return self.__move_snake_point(point_index, dst_point_index), dst_point_index
 
     def __move_snake_point(self, src_index: int, dst_index: int) -> MapState:
+        log.debug('DST: {}'.format(dst_index))
         dst_point = self.points[dst_index]
         src_point = self.points[src_index]
 
@@ -153,6 +156,9 @@ class GameMap:
             shift = line * self.width
             serialized_points.append([p.serialize() for p in self.points[shift:shift + self.width]])
         return serialized_points
+
+    def convert_point_index_to_coordinate(self, point_index: int) -> typing.Tuple[int, int]:
+        return point_index // self.width, point_index % self.width
 
     def __str__(self):
         return 'Class: {0}. Map\n{1}'.format(self.__class__, '\n'.join(map(str, self.serialize())))

@@ -63,13 +63,6 @@ class SnakeGame:
         return step_result in AVAILABLE_PLAYER_ACTIONS
 
     def _move_player(self, player: BasePlayer) -> typing.Optional[MapState]:
-        player_action = player.next_step(self.game_map)
-
-        if not self._validate_player_action(player_action):
-            return None
-
-        player_action = PlayerAction(player_action)
-
         if player.get_index_head() is None:
             player_index_head = self.game_map.find_player_position(player)
 
@@ -78,10 +71,18 @@ class SnakeGame:
 
             player.extend(player_index_head)
 
+        player_action = player.next_step(self.game_map)
+
+        if not self._validate_player_action(player_action):
+            return None
+
+        player_action = PlayerAction(player_action)
+
         direction = player.change_direction(player_action)
         map_state = None
         dst_index = None
         index_head = player.get_index_head()
+        log.debug('Direction: {}'.format(direction))
 
         if direction == PlayerDirection.UP:
             map_state, dst_index = self.game_map.move_point_up(index_head)

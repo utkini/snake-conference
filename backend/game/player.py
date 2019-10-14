@@ -1,6 +1,10 @@
 from collections import deque
 from enum import Enum
 
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from game.game_map import GameMap
+
 
 class PlayerAction(Enum):
     LEFT = -1
@@ -68,8 +72,10 @@ class BasePlayer:
     def get_score(self):
         return self.__score
 
-    def next_step(self, game_map):
-        return self.next_step_obj.next_step(game_map)
+    def next_step(self, game_map: 'GameMap'):
+        return self.next_step_obj.next_step(
+            game_map.serialize(), game_map.convert_point_index_to_coordinate(self.get_index_head())
+        )
 
     def serialize(self):
         return {'hash': self.hash, 'name': self.name}
@@ -80,7 +86,7 @@ class SimpleTestPlayer:
               PlayerAction.STRAIGHT.value)
     steps = iter(_steps)
 
-    def next_step(self, game_map):
+    def next_step(self, game_map, head_coordinate):
         try:
             return next(self.steps)
         except (StopIteration, ) as exc:
