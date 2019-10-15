@@ -121,15 +121,15 @@
 
     methods: {
       play() {
-        let timeout = 500
-        this.currentFrame = 0
+        let timeout = 500;
+        this.currentFrame = 0;
 
         let timer = setInterval(() => {
-          console.log(`Displaying frame #${this.currentFrame}`)
-          this.currentFrame += 1
+          console.log(`Displaying frame #${this.currentFrame}`);
+          this.currentFrame += 1;
 
           if (this.currentFrame + 1 >= this.boardLog.length) {
-            console.log(`Finished. boardIdx: ${this.currentFrame}, boardLog length: ${this.boardLog.length}`)
+            console.log(`Finished. boardIdx: ${this.currentFrame}, boardLog length: ${this.boardLog.length}`);
             clearInterval(timer)
           }
         }, timeout)
@@ -140,36 +140,36 @@
       },
 
       initFromGameLog(gameLog) {
-        this.players = Object.values(gameLog.players)
+        this.players = Object.values(gameLog.players);
 
-        this.players[0].cellType = cellTypes.PLAYER0
-        this.players[1].cellType = cellTypes.PLAYER1
+        this.players[0].cellType = cellTypes.PLAYER0;
+        this.players[1].cellType = cellTypes.PLAYER1;
 
-        this.boardLog = []
+        this.boardLog = [];
         gameLog.steps.forEach((board, boardIdx) => {
-          this.boardLog[boardIdx] = []
+          this.boardLog[boardIdx] = [];
 
           board.forEach((row, rowIdx) => {
-            this.boardLog[boardIdx][rowIdx] = []
+            this.boardLog[boardIdx][rowIdx] = [];
 
             row.forEach((cell, cellIdx) => {
-              let val = cellTypes.EMPTY
+              let val = cellTypes.EMPTY;
               switch (cell.state) {
                 case 1:
-                  val = this.players.filter(pl => pl.hash === cell.player)[0].cellType
-                  break
+                  val = this.players.filter(pl => pl.hash === cell.player)[0].cellType;
+                  break;
                 case 2:
                   val = cellTypes.APPLE
               }
               this.boardLog[boardIdx][rowIdx][cellIdx] = val
             })
           })
-        })
+        });
         this.reset()
       },
 
       submitGameLog() {
-        console.log(JSON.parse(this.input))
+        console.log(JSON.parse(this.input));
         this.initFromGameLog(JSON.parse(this.input))
       },
     }
