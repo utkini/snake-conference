@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
+  import { mapGetters, mapState } from 'vuex'
 
   import Board from './components/Board'
   import GamesList from './components/GamesList'
@@ -100,8 +100,10 @@
       currentFrame: 0,
     }},
     computed: {
-      ...mapGetters('game', [
+      ...mapState('game', [
         'selectedGame',
+      ]),
+      ...mapGetters('game', [
         'selectedPlayers'
       ]),
 
