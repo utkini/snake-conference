@@ -28,10 +28,6 @@
 </script>
 
 <style>
-  .board {
-
-  }
-
   .board-wrapper {
     border: 2px solid grey;
     display: inline-block;
