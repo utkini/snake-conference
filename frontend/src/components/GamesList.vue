@@ -8,9 +8,9 @@
     <div class="games-list">
       <game-item v-for="(game, idx) in gamesList"
                  :game="game" :key="idx"
-                 @click.native="setSelectedGameId(idx)"
+                 @click.native="selectGame(game)"
                  :class="[
-                    {'selected': idx === selectedGameId },
+                    {'selected': game.game_log_id === selectedGameId },
                     'game-item'
                  ]"
       />
@@ -32,18 +32,20 @@
     computed: {
       ...mapState('game', [
         'gamesList',
-        'selectedGameId'
+        'selectedGameId',
+        'selectedGame'
       ])
     },
     methods: {
       ...mapActions('game', [
-        'refreshGamesList'
-      ]),
-      ...mapMutations('game', [
-        'setSelectedGameId'
+        'refreshGamesList',
+        'getGame'
       ]),
       refresh() {
         this.refreshGamesList()
+      },
+      selectGame(game) {
+        this.getGame(game.game_log_id)
       }
     },
     created() {
