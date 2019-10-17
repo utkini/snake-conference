@@ -1,6 +1,7 @@
 import logging
 import time
 import typing
+from collections import Counter
 from enum import Enum
 from itertools import cycle
 
@@ -48,15 +49,22 @@ class SnakeGame:
     def set_winner(self, player: BasePlayer):
         self.winner = player
 
-    def define_winner(self, current_player: BasePlayer, map_state: MapState) -> typing.Optional[BasePlayer]:
+    def define_winner(self, current_player: typing.Optional[BasePlayer],
+                      map_state: typing.Optional[MapState]) -> typing.Optional[BasePlayer]:
         players = self.players.copy()
         winner = None
-        if map_state == MapState.CRASH:
+
+        if current_player is not None and map_state == MapState.CRASH and current_player.hash in players:
             players.pop(current_player.hash)
 
         if players:
-            winner = max(players.values(), key=lambda p: p.get_score())
-            self.set_winner(winner)
+            players_scores = {player: player.get_score() for player in players.values()}
+            scores = Counter(players_scores.values())
+            tmp_winner, max_score = max(players_scores.items(), key=lambda p: p[1])
+
+            if scores[max_score] == 1:
+                winner = tmp_winner
+                self.set_winner(winner)
 
         return winner
 
@@ -111,6 +119,8 @@ class SnakeGame:
     def stop(self):
         self.game_state = GameState.STOPPED
         self.end_time = time.time()
+        if self.winner is None:
+            self.define_winner(None, None)
 
     def run(self):
         self.game_state = GameState.PLAYING
