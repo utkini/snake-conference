@@ -1,13 +1,17 @@
 import hashlib
 import json
 import os
+import typing
 
 import settings
 from settings import GAME_LOG_DIR
 
+if typing.TYPE_CHECKING:
+    from .play import SnakeGame
+
 
 class SnakeGameLog:
-    def __init__(self, game):
+    def __init__(self, game: 'SnakeGame'):
         self.game = game
         self.serialized_game = self._serialize()
 
@@ -18,6 +22,7 @@ class SnakeGameLog:
         result['steps'] = self.game.game_log
         result['startTime'] = int(self.game.start_time)
         result['endTime'] = int(self.game.end_time)
+        result['winner'] = self.game.winner.hash if self.game.winner is not None else None
         return result
 
     def to_json(self):
