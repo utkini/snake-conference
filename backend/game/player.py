@@ -78,12 +78,12 @@ class BasePlayer:
         )
 
     def serialize(self):
-        return {'hash': self.hash, 'name': self.name}
+        return {'hash': self.hash, 'name': self.name, 'score': self.get_score()}
 
 
 class SimpleTestPlayer:
-    _steps = (PlayerAction.LEFT.value, PlayerAction.RIGHT.value, PlayerAction.STRAIGHT.value, PlayerAction.STRAIGHT.value,
-              PlayerAction.STRAIGHT.value)
+    _steps = (PlayerAction.LEFT.value, PlayerAction.RIGHT.value, PlayerAction.STRAIGHT.value,
+              PlayerAction.STRAIGHT.value, PlayerAction.STRAIGHT.value)
     steps = iter(_steps)
 
     def next_step(self, game_map, head_coordinate):
