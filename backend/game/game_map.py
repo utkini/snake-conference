@@ -131,6 +131,8 @@ class GameMap:
         dst_point = self.points[dst_index]
         src_point = self.points[src_index]
 
+        self.points[dst_index] = copy(src_point)
+
         result = MapState.PLAY
         if dst_point.state in CRASH_POINT_STATES:
             result = MapState.CRASH
@@ -139,8 +141,6 @@ class GameMap:
             if self.left_scores:
                 self.add_score_point()
             result = MapState.SCORE
-
-        self.points[dst_index] = copy(src_point)
 
         return result
 
