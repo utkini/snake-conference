@@ -31,5 +31,7 @@
   .board-wrapper {
     border: 2px solid grey;
     display: inline-block;
+    line-height: 1.5;
+    border-radius: .3rem;
   }
 </style>
