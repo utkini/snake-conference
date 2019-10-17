@@ -20,10 +20,9 @@
     },
     computed: {
       cellTypeClass() {
-        if (this.cell === cellTypes.WALL) { return 'bg-dark' }
         if (this.cell === cellTypes.APPLE) { return 'apple' }
-        if (this.cell === cellTypes.PLAYER0) { return 'bg-primary'}
-        if (this.cell === cellTypes.PLAYER1) { return 'bg-success' }
+        if (this.cell === cellTypes.PLAYER0) { return 'player0'}
+        if (this.cell === cellTypes.PLAYER1) { return 'player1' }
         return ''
       },
       cellContent() {
@@ -53,14 +52,16 @@
     width: $cell-size;
     height: $cell-size;
     color: green;
-    /*background-color: indianred;*/
   }
 
   .player0 {
     background-color: $player0-color;
+    line-height: 1.5;
+    border-radius: .3rem;
   }
-
   .player1 {
     background-color: $player1-color;
+    line-height: 1.5;
+    border-radius: .3rem;
   }
 </style>
