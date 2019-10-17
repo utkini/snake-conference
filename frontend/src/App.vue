@@ -9,7 +9,7 @@
     <button @click="reset">
       <ion-icon name="refresh"></ion-icon>
     </button>
-
+    <p>Real-time simulation: <input type="checkbox" v-model="realTimeSimulation"></p>
     <div style="display: flex; justify-content: space-around;">
       <player-panel :player="players[0]" :player-idx="0"/>
 
@@ -42,7 +42,11 @@
       PlayerPanel
     },
     data() { return {
+      // Settings
+      realTimeSimulation: false,
+
       input: null,
+      move_timeout_ms: 200,
       boardLog: [
         [ //frame 0
           [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
@@ -123,18 +127,22 @@
 
     methods: {
       play() {
-        let timeout = 500
         this.currentFrame = 0
 
         let timer = setInterval(() => {
           console.log(`Displaying frame #${this.currentFrame}`)
-          this.currentFrame += 1
+          if (this.currentFrame + 2 < this.boardLog.length && this.realTimeSimulation) {
+            // Skipping one frame to simulate real-time game
+            this.currentFrame += 2
+          } else {
+            this.currentFrame += 1
+          }
 
           if (this.currentFrame + 1 >= this.boardLog.length) {
             console.log(`Finished. boardIdx: ${this.currentFrame}, boardLog length: ${this.boardLog.length}`)
             clearInterval(timer)
           }
-        }, timeout)
+        }, this.move_timeout_ms)
       },
 
       reset() {
