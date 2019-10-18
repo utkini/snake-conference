@@ -10,7 +10,7 @@
 1. Create a directory `./backend/.game_log` (can be changed by `GAME_LOG_DIR_NAME` in ./backend/settings.py)
 1. `python ./backend/app.py`
 
-**Froneend**
+**Frontend**
 
 1. `cd ./frontend`
 1. `npm i`
@@ -30,4 +30,5 @@ The application is available by address printed by `npm run serve`. Usually, it 
 
 
 To play once again, just run `python ./backend/sample_run.py` again. 
+
 To play with other players, put them into `./backend/game_players` instead of the old ones.
