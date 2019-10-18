@@ -6,21 +6,29 @@
 
 <script>
   import cellTypes from './../cell-types'
+  import "./../styles.scss"
 
   export default {
     name: 'Cell',
     props: ['cell'],
+    data() {
+        return {
+            images: {
+                apple: require('../assets/apple.png')
+            }
+        }
+    },
     computed: {
       cellTypeClass() {
-        if (this.cell === cellTypes.WALL) { return 'wall' }
         if (this.cell === cellTypes.APPLE) { return 'apple' }
-        if (this.cell === cellTypes.PLAYER0) { return 'player0' }
+        if (this.cell === cellTypes.PLAYER0) { return 'player0'}
         if (this.cell === cellTypes.PLAYER1) { return 'player1' }
         return ''
       },
-
       cellContent() {
-        if (this.cell === cellTypes.APPLE) { return '<ion-icon name="logo-apple"></ion-icon>' }
+          // eslint-disable-next-line no-console,no-undef
+          console.log('heh');
+        if (this.cell === cellTypes.APPLE) { return '<img class="apple" src=' + this.images.apple + '>' }
         return ''
       }
     }
@@ -34,7 +42,6 @@
     width: $cell-size;
     height: $cell-size;
     margin: 1px;
-    background-color: white;
   }
 
   .wall {
@@ -42,16 +49,19 @@
   }
 
   .apple {
+    width: $cell-size;
+    height: $cell-size;
     color: green;
-    font-size: $cell-size;
-    /*background-color: indianred;*/
   }
 
   .player0 {
     background-color: $player0-color;
+    line-height: 1.5;
+    border-radius: .3rem;
   }
-
   .player1 {
     background-color: $player1-color;
+    line-height: 1.5;
+    border-radius: .3rem;
   }
 </style>

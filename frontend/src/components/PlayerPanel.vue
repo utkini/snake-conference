@@ -1,9 +1,9 @@
 <template>
-  <div class="player-panel">
-    <div :class="['player-name', playerClass]">
-      {{player.name}}
+    <div class="player-panel">
+        <div :class="['player-name', 'btn-lg', playerClass]">
+            {{player.name}}
+        </div>
     </div>
-  </div>
 </template>
 
 <script>

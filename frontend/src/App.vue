@@ -1,29 +1,53 @@
 <template>
-  <div id="app">
-    <games-list/>
+    <div id="app">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-3 player_view">
+                    <games-list/>
+                </div>
+                <div class="col player_view">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-4">
+                                <h3>Active Game</h3>
+                            </div>
+                            <div class="col" >
+                                <button @click="play" type="button" class="btn btn-light">
+                                    <ion-icon name="play"></ion-icon>
+                                </button>
+                                <button @click="reset" type="button" class="btn btn-light">
+                                    <ion-icon name="refresh"></ion-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <p>Real-time simulation: <input type="checkbox" v-model="realTimeSimulation"></p>
+                    <div style="display: flex; justify-content: space-around;" class="col">
+                        <player-panel :player="players[0]" :player-idx="0"/>
+                        <board :board="currentBoard"/>
+                        <player-panel :player="players[1]" :player-idx="1"/>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <h3>Active Game</h3>
-    <button @click="play">
-      <ion-icon name="play"></ion-icon>
-    </button>
-    <button @click="reset">
-      <ion-icon name="refresh"></ion-icon>
-    </button>
-    <p>Real-time simulation: <input type="checkbox" v-model="realTimeSimulation"></p>
-    <div style="display: flex; justify-content: space-around;">
-      <player-panel :player="players[0]" :player-idx="0"/>
+      <div class="card blocks">
+            <button class="btn btn-light" data-toggle="collapse" data-target="#collapseForm" aria-expanded="false"
+                    aria-controls="collapseForm" >
+                <h3>Manual JSON Upload</h3>
+            </button>
+      </div>
+<div class="collapse" id="collapseForm" >
+                <div class="card card-body" style="margin: 0 1%">
+                    <textarea v-model="input" class="form-control" id="exampleFormControlTextarea1" rows="7"></textarea>
 
-      <board :board="currentBoard"/>
-
-      <player-panel :player="players[1]" :player-idx="1"/>
+                <button @click="submitGameLog" type="button" class="btn btn-light btn-lg">
+                    Submit
+                </button>
+            </div>
     </div>
+</div>
 
-    <h3>Manual JSON Upload</h3>
-    <textarea v-model="input" cols="45" rows="10" style="margin-top: 10px;"></textarea>
-    <button @click="submitGameLog">
-      Submit
-    </button>
-  </div>
 </template>
 
 <script>
@@ -49,52 +73,52 @@
       move_timeout_ms: 200,
       boardLog: [
         [ //frame 0
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.APPLE, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.APPLE, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
         [ //frame 1
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.APPLE, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.APPLE, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
         [ //frame 2
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.APPLE, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.APPLE, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
         [ //frame 3
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
         [ //frame 4
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
         [ //frame 5
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER1, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.WALL],
-          [cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL, cellTypes.WALL],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER0, cellTypes.PLAYER0, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.PLAYER1, cellTypes.PLAYER1, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
+          [cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY, cellTypes.EMPTY],
         ],
       ],
       players: [
@@ -127,7 +151,7 @@
 
     methods: {
       play() {
-        this.currentFrame = 0
+        this.currentFrame = 0;
 
         let timer = setInterval(() => {
           console.log(`Displaying frame #${this.currentFrame}`)
@@ -139,7 +163,7 @@
           }
 
           if (this.currentFrame + 1 >= this.boardLog.length) {
-            console.log(`Finished. boardIdx: ${this.currentFrame}, boardLog length: ${this.boardLog.length}`)
+            console.log(`Finished. boardIdx: ${this.currentFrame}, boardLog length: ${this.boardLog.length}`);
             clearInterval(timer)
           }
         }, this.move_timeout_ms)
@@ -150,36 +174,36 @@
       },
 
       initFromGameLog(gameLog) {
-        this.players = Object.values(gameLog.players)
+        this.players = Object.values(gameLog.players);
 
-        this.players[0].cellType = cellTypes.PLAYER0
-        this.players[1].cellType = cellTypes.PLAYER1
+        this.players[0].cellType = cellTypes.PLAYER0;
+        this.players[1].cellType = cellTypes.PLAYER1;
 
-        this.boardLog = []
+        this.boardLog = [];
         gameLog.steps.forEach((board, boardIdx) => {
-          this.boardLog[boardIdx] = []
+          this.boardLog[boardIdx] = [];
 
           board.forEach((row, rowIdx) => {
-            this.boardLog[boardIdx][rowIdx] = []
+            this.boardLog[boardIdx][rowIdx] = [];
 
             row.forEach((cell, cellIdx) => {
-              let val = cellTypes.EMPTY
+              let val = cellTypes.EMPTY;
               switch (cell.state) {
                 case 1:
-                  val = this.players.filter(pl => pl.hash === cell.player)[0].cellType
-                  break
+                  val = this.players.filter(pl => pl.hash === cell.player)[0].cellType;
+                  break;
                 case 2:
                   val = cellTypes.APPLE
               }
               this.boardLog[boardIdx][rowIdx][cellIdx] = val
             })
           })
-        })
+        });
         this.reset()
       },
 
       submitGameLog() {
-        console.log(JSON.parse(this.input))
+        console.log(JSON.parse(this.input));
         this.initFromGameLog(JSON.parse(this.input))
       },
     }
@@ -187,11 +211,22 @@
 </script>
 
 <style>
-  #app {
-    margin: 60px;
-  }
+    #app {
+        margin: 3%;
+        background: #e6ecf0;
+    }
 
-  button {
-    margin: 5px;
-  }
+    .player_view {
+        background: white;
+        padding: 5px;
+        margin: 0 1%
+    }
+
+    .blocks {
+        margin: 0 1%;
+        margin-top: 0.5%;
+    }
+    button {
+      margin: 10px;
+    }
 </style>
