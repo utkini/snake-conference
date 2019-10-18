@@ -3,6 +3,7 @@ import App from './App.vue'
 import Vuex from 'vuex'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/js/bootstrap.min'
 
 Vue.use(Vuex);
 
